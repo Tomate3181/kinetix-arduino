@@ -6,15 +6,7 @@
 // VARIÁVEIS INTERNAS E OBJETOS DE HARDWARE
 // =============================================================================
 static DHT dht(PIN_DHT, DHT_TYPE);
-static SensorData currentData = {
-    .temperatura = 22.0f,
-    .umidade = 50.0f,
-    .lacre_violado = false,
-    .impacto_detectado = false,
-    .qtd_impactos = 0,
-    .carga_inclinada = false,
-    .status_geral = "OK"
-};
+static SensorData currentData;
 
 // Variáveis voláteis controladas pelas rotinas de interrupção (ISRs)
 static volatile unsigned long lastVibInterruptTime = 0;
@@ -56,6 +48,15 @@ void handleTiltISR() {
 // INICIALIZAÇÃO DOS SENSORES
 // =============================================================================
 void sensorsInit() {
+    // Inicializa valores padrão da estrutura de dados
+    currentData.temperatura = 22.0f;
+    currentData.umidade = 50.0f;
+    currentData.lacre_violado = false;
+    currentData.impacto_detectado = false;
+    currentData.qtd_impactos = 0;
+    currentData.carga_inclinada = false;
+    strcpy(currentData.status_geral, "OK");
+
     // Configura entradas digitais com INPUT_PULLUP onde aplicável para estabilidade
     pinMode(PIN_LDR, INPUT);
     pinMode(PIN_VIBRATION, INPUT_PULLUP);
